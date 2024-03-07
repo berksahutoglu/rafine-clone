@@ -12,7 +12,11 @@ Haber ve Güncel Olaylar
 
 Rafine
 
+<<<<<<< HEAD
 ### 3. Uygulama Adresi
+=======
+### 3. Websitesi Adresi
+>>>>>>> b41b0f3d0713e9d8367a9c629d2745fd7b7ed387
 
 https://news.rafine.io/
 
