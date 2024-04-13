@@ -44,4 +44,4 @@ Berk Şahutoğlu
 
 # Kullanıcı Kullanım Senaryosu Diyagramı
 
-![1](Rafine-Clone%20Kullanıcı%20Kullanım%20Senaryosu/%20Diyagramı.png)
+![Rafine-Clone Kullanıcı Kullanım Senaryosu Diyagramı](Rafine-Clone%20Kullanıcı%20Kullanım%20Senaryosu%20Diyagramı.png)
