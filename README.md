@@ -14,7 +14,6 @@ Rafine
 
 ### 3. Websitesi Adresi
 
-
 https://news.rafine.io/
 
 # Grup Adı
@@ -42,3 +41,7 @@ Berk Şahutoğlu
 8.[Test](https://github.com/berksahutoglu/rafine-clone/wiki/Test)
 
 9.[Geliştirici ve Kullanıcı Dökümantasyonları](https://github.com/berksahutoglu/rafine-clone/wiki/Geli%C5%9Ftirici-ve-Kullan%C4%B1c%C4%B1-D%C3%B6k%C3%BCmantasyonlar%C4%B1)
+
+# Kullanıcı Kullanım Senaryosu Diyagramı
+
+![1](Rafine-Clone Kullanıcı Kullanım Senaryosu Diyagramı.png)
