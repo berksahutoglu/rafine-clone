@@ -44,4 +44,4 @@ Berk Şahutoğlu
 
 # Kullanıcı Kullanım Senaryosu Diyagramı
 
-![1]([Rafine-Clone Kullanıcı Kullanım Senaryosu Diyagramı.png](https://github.com/berksahutoglu/rafine-clone/commit/9f0f4021af4ece4f8c3e0d3cb83e7071bd8cd4c1))
+![1](Rafine-Clone%20Kullanıcı%20Kullanım%20Senaryosu/%20Diyagramı.png)
