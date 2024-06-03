@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "client": "cd .. && cd frontend/rafine && npm start",
+    "dev": "concurrently \"nodemon index.js\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
