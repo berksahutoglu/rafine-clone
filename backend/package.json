@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "client": "cd .. && cd frontend/rafine && npm start",
-    "dev": "concurrently \"nodemon index.js\" \"npm run client\""
+    "dev": "concurrently \"nodemon index.js\" \"npm run client\"",
+    "build": "npm i"
   },
   "keywords": [],
   "author": "",
