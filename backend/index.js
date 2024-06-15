@@ -36,7 +36,10 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000" }));
+app.use(cors({ 
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
@@ -58,11 +61,23 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json(file.filename);
 });
 
+// JWT Middleware
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json("Not authenticated!");
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json("Token is not valid!");
+    req.user = user;
+    next();
+  });
+};
+
 // Routes
-app.use("/api/users", userRoutes);
+app.use("/api/users", verifyToken, userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/notifications", notificationRoutes);
+app.use("/api/posts", verifyToken, postRoutes);
+app.use("/api/notifications", verifyToken, notificationRoutes);
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, "../frontend/rafine/build")));
