@@ -19,16 +19,21 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setCurrentUser(res.data);
+      localStorage.setItem("user", JSON.stringify(res.data));
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     } catch (err) {
       if (err.response && err.response.data) {
-        throw new Error(err.response.data); // Hata mesajını fırlat
+        throw new Error(err.response.data);
       } else {
-        throw new Error("An unexpected error occurred"); // Genel bir hata fırlat
+        throw new Error("An unexpected error occurred");
       }
     }
   };
 
   useEffect(() => {
+    if (currentUser && currentUser.token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${currentUser.token}`;
+    }
     localStorage.setItem("user", JSON.stringify(currentUser));
   }, [currentUser]);
 
