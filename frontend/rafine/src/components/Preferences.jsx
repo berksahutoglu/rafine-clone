@@ -9,6 +9,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
+import SettingsNavbar from "./SettingsNavbar";
 
 const Preferences = () => {
   const divStyle = {
@@ -19,7 +20,8 @@ const Preferences = () => {
   };
   return (
     <>
-      <NavBar />
+      <SettingsNavbar />
+
       <Stack display={"flex"} flexDirection={"row"}>
         <Box
           height={727}

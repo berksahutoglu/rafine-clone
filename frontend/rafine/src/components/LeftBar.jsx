@@ -40,7 +40,9 @@ const LeftBar = () => {
     const fetchPosts = async () => {
       try {
         const res = await makeRequest.get("/posts");
-        const importantPosts = res.data.filter((post) => post.isChecked === 1);
+        const importantPosts = res.data.filter(
+          (post) => post.isChecked === true
+        );
         setPosts(importantPosts);
       } catch (err) {
         console.log(err);

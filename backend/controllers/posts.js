@@ -1,89 +1,104 @@
 import moment from "moment/moment.js";
-import { db } from "../connect.js";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
+import Notification from "../models/Notification.js";
 import jwt from "jsonwebtoken";
-export const getPosts = (req, res) => {
+
+// Get all posts
+export const getPosts = async (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "secretkey", async (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = `SELECT p.*, u.name, u.profilePic
-    FROM posts p
-    JOIN users u ON u.id = p.userId
-    ORDER BY p.createdAt DESC;`;
-
-    db.query(q, (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.status(200).json(data);
-    });
+    try {
+      const posts = await Post.find()
+        .populate("userId", "name profilePic")
+        .sort({ createdAt: -1 });
+      res.status(200).json(posts);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
 };
 
-export const addPost = (req, res) => {
+// Add a new post
+export const addPost = async (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "secretkey", async (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q =
-      "INSERT INTO posts (`desc`,`img`,`title`,`createdAt`,`userId`,`content`,`isChecked`) VALUES (?)";
+    try {
+      const newPost = new Post({
+        desc: req.body.desc,
+        img: req.body.img,
+        title: req.body.title,
+        createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        userId: userInfo.id,
+        content: req.body.content,
+        isChecked: req.body.isChecked,
+      });
 
-    const values = [
-      req.body.desc,
-      req.body.img,
-      req.body.title,
-      moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-      userInfo.id,
-      req.body.content,
-      req.body.isChecked,
-    ];
-
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res
+      const savedPost = await newPost.save();
+      res
         .status(200)
-        .json({ message: "Post has been created", id: data.insertId });
-    });
+        .json({ message: "Post has been created", id: savedPost._id });
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
 };
 
-export const updatePost = (req, res) => {
+// Update a post
+export const updatePost = async (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "secretkey", async (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q =
-      "UPDATE posts SET `title` = ?, `desc` = ? WHERE `id` = ? AND `userId` = ?";
+    try {
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: req.params.id, userId: userInfo.id },
+        { title: req.body.title, desc: req.body.desc },
+        { new: true }
+      );
 
-    const values = [req.body.title, req.body.desc, req.params.id, userInfo.id];
-
-    db.query(q, values, (err, data) => {
-      if (err) return res.status(500).json(err);
-      if (data.affectedRows === 0)
+      if (!updatedPost)
         return res.status(404).json("Post not found or not authorized");
-      return res.status(200).json("Post has been updated");
-    });
+      res.status(200).json("Post has been updated");
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
 };
 
-export const deletePost = (req, res) => {
+// Delete a post
+export const deletePost = async (req, res) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
-  jwt.verify(token, "secretkey", (err, userInfo) => {
+  jwt.verify(token, "secretkey", async (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "DELETE FROM posts WHERE `id`=? AND `userId` = ?";
+    try {
+      // Post'u sil
+      const deletedPost = await Post.findOneAndDelete({
+        _id: req.params.id,
+        userId: userInfo.id,
+      });
+      if (!deletedPost)
+        return res.status(403).json("You can delete only your post");
 
-    db.query(q, [req.params.id, userInfo.id], (err, data) => {
-      if (err) return res.status(500).json(err);
-      if (data.affectedRows > 0)
-        return res.status(200).json("Post has been deleted.");
-      return res.status(403).json("You can delete only your post");
-    });
+      // İlgili bildirimleri sil
+      await Notification.deleteMany({ postId: req.params.id }); // <--- corrected
+
+      res.status(200).json("Post and its notifications have been deleted.");
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
 };

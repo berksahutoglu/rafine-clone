@@ -96,8 +96,6 @@ const SettingsNavbar = ({ value, handleChange, userId }) => {
     </Box>
   );
 
-  console.log("Notifications:", notifications);
-
   return (
     <AppBar sx={{ height: 60, bgcolor: "white", display: "flex" }}>
       <StyledToolBar>

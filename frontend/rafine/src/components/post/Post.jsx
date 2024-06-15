@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -10,15 +10,13 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import moment from "moment";
 import { Box, Menu, MenuItem, Button, TextField, Modal } from "@mui/material";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useState } from "react";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -61,7 +59,7 @@ const Post = ({ post, notifications }) => {
     setAnchorEl(null);
   };
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: (post_id) => {
@@ -69,7 +67,6 @@ const Post = ({ post, notifications }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
-      deleteNotificationMutation.mutate(post.notificationId);
       setIsDeleted(true);
     },
   });
@@ -83,22 +80,13 @@ const Post = ({ post, notifications }) => {
     },
   });
 
-  const deleteNotificationMutation = useMutation({
-    mutationFn: (notification_id) => {
-      return makeRequest.delete("/notifications/" + notification_id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["notifications"]);
-    },
-  });
-
   const handleDelete = () => {
     handleClose();
     setShowConfirmation(true);
   };
 
   const handleConfirmDelete = () => {
-    deleteMutation.mutate(post.id);
+    deleteMutation.mutate(post._id);
     setIsDeleted(true);
     setShowConfirmation(false);
   };
@@ -129,7 +117,7 @@ const Post = ({ post, notifications }) => {
     post.desc = editDesc;
 
     editMutation.mutate(
-      { post_id: post.id, updatedPost },
+      { post_id: post._id, updatedPost },
       {
         onError: (error) => {
           setErrorMessage("Error updating the post: " + error.message);
@@ -151,9 +139,12 @@ const Post = ({ post, notifications }) => {
       <Card sx={{ width: 700 }}>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {post.profilePic}
-            </Avatar>
+            <Avatar
+              src={post.userId.profilePic}
+              alt=""
+              sx={{ bgcolor: red[500] }}
+              aria-label="recipe"
+            ></Avatar>
           }
           action={
             <IconButton
@@ -166,7 +157,7 @@ const Post = ({ post, notifications }) => {
               <MoreVertIcon />
             </IconButton>
           }
-          title={post.name}
+          title={post.userId.name}
           subheader={moment(post.createdAt).fromNow()}
         />
         <Typography
@@ -179,7 +170,17 @@ const Post = ({ post, notifications }) => {
         >
           {post.title}
         </Typography>
-        <CardMedia component="img" image={"/upload/" + post.img} alt="" />
+        <CardMedia
+          sx={{
+            maxWidth: 700,
+            height: "auto",
+            maxHeight: 500,
+            objectFit: "contain",
+          }}
+          component="img"
+          image={"/upload/" + post.img}
+          alt=""
+        />
 
         <CardActions disableSpacing>
           <ExpandMore

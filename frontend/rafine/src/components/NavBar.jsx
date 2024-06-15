@@ -10,15 +10,15 @@ import {
   Toolbar,
   Typography,
   styled,
+  Badge,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ReactComponent as Logo } from "../photos/logo.svg";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import Paper from "@mui/material/Paper";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,9 @@ const NavBar = ({ value, handleChange, userId }) => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0); // Başlangıçta 0 bildirim var
+
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const {
     isLoading,
@@ -40,18 +43,24 @@ const NavBar = ({ value, handleChange, userId }) => {
     queryFn: () => makeRequest.get(`/notifications`).then((res) => res.data),
   });
 
+  useEffect(() => {
+    if (notifications) {
+      setUnreadCount(notifications.length);
+    }
+  }, [notifications]);
+
   const toggleDrawer = (newOpen) => () => {
     setDrawerOpen(newOpen);
   };
 
   const toggleNotifications = () => {
     setNotificationsOpen(!notificationsOpen);
+    setUnreadCount(0); // Reset unread count when the notifications panel is opened
   };
 
   const handleLogout = async () => {
     try {
       await makeRequest.post("/auth/logout"); // Assuming an endpoint for logout
-
       navigate("/login");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -107,8 +116,6 @@ const NavBar = ({ value, handleChange, userId }) => {
     </Box>
   );
 
-  console.log("Notifications:", notifications);
-
   return (
     <AppBar sx={{ height: 60, bgcolor: "white", display: "flex" }}>
       <StyledToolBar>
@@ -134,12 +141,14 @@ const NavBar = ({ value, handleChange, userId }) => {
         </Box>
         <Box mr={11}>
           <Box display={"flex"}>
-            <Button
-              sx={{ display: "flex", gap: 4, color: "#223734" }}
-              onClick={toggleNotifications}
-            >
-              <NotificationsActiveIcon />
-            </Button>
+            <Badge badgeContent={unreadCount} color="error">
+              <Button
+                sx={{ display: "flex", gap: 4, color: "#223734" }}
+                onClick={toggleNotifications}
+              >
+                <NotificationsActiveIcon />
+              </Button>
+            </Badge>
             <Button onClick={toggleDrawer(true)} sx={{ color: "#223734" }}>
               <MoreHorizIcon />
             </Button>

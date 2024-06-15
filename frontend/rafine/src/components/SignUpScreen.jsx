@@ -39,8 +39,6 @@ const SignUpScreen = () => {
     }
   };
 
-  console.log(err);
-
   const theme = createTheme({
     components: {
       MuiTabs: {
