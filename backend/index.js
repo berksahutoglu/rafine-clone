@@ -6,6 +6,8 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import authRoutes from "./routes/auth.js";
@@ -15,6 +17,8 @@ import notificationRoutes from "./routes/notification.js";
 dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // MongoDB Connection
 mongoose
@@ -32,7 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ origin: "https://rafine-clone.vercel.app" }));
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:3000" }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
@@ -40,10 +44,10 @@ app.use(morgan("common"));
 // File upload setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../frontend/rafine/public/upload");
+    cb(null, path.join(__dirname, "../frontend/rafine/public/upload"));
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -60,13 +64,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
-const PORT = "https://rafine-clone-6.onrender.com";
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, "../frontend/rafine/build")));
+
+// Catch-all handler to serve React's index.html for any unhandled routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/rafine/build", "index.html"));
+});
 
 // Start the server
-<<<<<<< HEAD
-=======
-const PORT = "https://rafine-clone-6.onrender.com"
->>>>>>> 5c14eec8abfac52e3801d211297c68cd3e170727
+const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => {
-  console.log("API working!");
+  console.log(`API working on port ${PORT}!`);
 });
