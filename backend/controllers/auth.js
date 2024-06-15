@@ -30,6 +30,7 @@ export const register = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+
 export const login = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -55,7 +56,7 @@ export const login = async (req, res) => {
         sameSite: "strict",
       })
       .status(200)
-      .json(others);
+      .json({ ...others, token }); // Token'ı ve diğer kullanıcı bilgilerini döndür
   } catch (err) {
     return res.status(500).json(err);
   }
