@@ -61,6 +61,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 // Start the server
-app.listen(8800, () => {
+const PORT = "https://rafine-clone-6.onrender.com"
+app.listen(PORT, () => {
   console.log("API working!");
 });
