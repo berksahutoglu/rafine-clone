@@ -39,7 +39,7 @@ const LeftBar = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await makeRequest.get("/posts");
+        const res = await makeRequest.get("/api/posts");
         const importantPosts = res.data.filter(
           (post) => post.isChecked === true
         );
