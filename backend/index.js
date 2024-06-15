@@ -74,10 +74,10 @@ const verifyToken = (req, res, next) => {
 };
 
 // Routes
-app.use("/api/users", verifyToken, userRoutes);
+app.use("/api/users",  userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", verifyToken, postRoutes);
-app.use("/api/notifications", verifyToken, notificationRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, "../frontend/rafine/build")));
