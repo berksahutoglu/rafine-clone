@@ -1,4 +1,6 @@
 import express from "express";
+import { verifyToken } from "../middleware/authMiddleware.js";
+
 import {
   addNotification,
   getNotifications,
@@ -7,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.get("/", getNotifications);
-router.post("/", addNotification);
-router.delete("/:id", deleteNotification);
+router.get("/",verifyToken, getNotifications);
+router.post("/",verifyToken, addNotification);
+router.delete("/:id",verifyToken, deleteNotification);
 
 export default router;
