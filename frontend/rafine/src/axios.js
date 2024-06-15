@@ -1,6 +1,12 @@
 import axios from "axios";
 
-export const makeRequest = axios.create({
-  baseURL: "https://rafine-clone-6.onrender.com/api/",
-  withCredentials: true,
+const baseURL = process.env.REACT_APP_API_URL || "http://localhost:8800";
+
+const instance = axios.create({
+  baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
+
+export const makeRequest = instance;

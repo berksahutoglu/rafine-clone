@@ -5,8 +5,17 @@ import bcrypt from "bcryptjs";
 // Get user by ID
 export const getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.user_id).select("-password");
+    const token = req.cookies.accessToken;
+
+    if (!token) {
+      return res.status(401).json("Not authenticated");
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+
     if (!user) return res.status(404).json("User not found!");
+
     res.json(user);
   } catch (err) {
     res.status(500).json(err);
