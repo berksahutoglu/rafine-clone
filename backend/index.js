@@ -63,6 +63,10 @@ app.use("/api/notifications", notificationRoutes);
 const PORT = "https://rafine-clone-6.onrender.com";
 
 // Start the server
+<<<<<<< HEAD
+=======
+const PORT = "https://rafine-clone-6.onrender.com"
+>>>>>>> 5c14eec8abfac52e3801d211297c68cd3e170727
 app.listen(PORT, () => {
   console.log("API working!");
 });
