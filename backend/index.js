@@ -73,7 +73,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     const url = await getDownloadURL(storageRef);
     res.status(200).json({ url });
   } catch (error) {
-    console.error("Dosya yüklenirken bir hata oluştu", error); // Hatanın detaylarını yazdırma
+    console.error("Dosya yüklenirken bir hata oluştu", error);
     res.status(500).json({ error: "Dosya yüklenirken bir hata oluştu" });
   }
 });
