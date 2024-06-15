@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "https://rafine-clone.vercel.app" }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
@@ -60,7 +60,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+const PORT = "https://rafine-clone-6.onrender.com";
+
 // Start the server
-app.listen(8800, () => {
+app.listen(PORT, () => {
   console.log("API working!");
 });
