@@ -5,16 +5,16 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
   try {
     // Email formatını kontrol et
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     if (!emailRegex.test(req.body.email)) {
       return res.status(400).json("Geçerli bir adres girin.");
     }
 
-    // Kullanıcının var olup olmadığını kontrol et
+    // CHECK IF USER EXISTS
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) return res.status(409).json("User already exists!");
 
-    // Yeni kullanıcı oluştur
+    // CREATE A NEW USER
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
@@ -30,7 +30,6 @@ export const register = async (req, res) => {
     return res.status(500).json(err);
   }
 };
-
 export const login = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -43,20 +42,16 @@ export const login = async (req, res) => {
     if (!isPasswordValid)
       return res.status(400).json("Wrong password or email!");
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: user._id }, "secretkey");
 
     const { password, ...others } = user._doc;
 
     res
       .cookie("accessToken", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Sadece üretim ortamında secure true
-        sameSite: "strict",
       })
       .status(200)
-      .json({ ...others, token }); // Token'ı ve diğer kullanıcı bilgilerini döndür
+      .json(others);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -65,9 +60,8 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res
     .clearCookie("accessToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Sadece üretim ortamında secure true
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
     })
     .status(200)
     .json("User has been logged out.");
