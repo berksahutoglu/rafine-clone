@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import authRoutes from "./routes/auth.js";
@@ -20,6 +22,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Firebase yapılandırması
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -58,9 +61,8 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
 
-// File upload setup
-
-const upload = multer({ storage: storage });
+// Multer yapılandırması
+const upload = multer({ storage: multer.memoryStorage() });
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
   const file = req.file;
@@ -71,6 +73,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     const url = await getDownloadURL(storageRef);
     res.status(200).json({ url });
   } catch (error) {
+    console.error("Dosya yüklenirken bir hata oluştu", error); // Hatanın detaylarını yazdırma
     res.status(500).json({ error: "Dosya yüklenirken bir hata oluştu" });
   }
 });
