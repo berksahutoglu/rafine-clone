@@ -4,7 +4,9 @@ import { createContext, useEffect, useState } from "react";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
 
   const login = async (inputs) => {
     try {
@@ -19,32 +21,16 @@ export const AuthContextProvider = ({ children }) => {
       setCurrentUser(res.data);
     } catch (err) {
       if (err.response && err.response.data) {
-        throw new Error(err.response.data);
+        throw new Error(err.response.data); // Hata mesajını fırlat
       } else {
-        throw new Error("An unexpected error occurred");
+        throw new Error("An unexpected error occurred"); // Genel bir hata fırlat
       }
     }
   };
 
-  const checkAuth = async () => {
-    try {
-      const res = await axios.get(
-        "https://rafine-clone-6.onrender.com/api/auth/user",
-        {
-          withCredentials: true,
-        }
-      );
-
-      setCurrentUser(res.data);
-    } catch (err) {
-      console.error(err);
-      setCurrentUser(null);
-    }
-  };
-
   useEffect(() => {
-    checkAuth();
-  }, []);
+    localStorage.setItem("user", JSON.stringify(currentUser));
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider value={{ currentUser, login, setCurrentUser }}>
