@@ -20,6 +20,18 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(firebaseApp);
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -36,29 +48,31 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ 
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
 
 // File upload setup
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../frontend/rafine/public/upload"));
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
 
 const upload = multer({ storage: storage });
 
-app.post("/api/upload", upload.single("file"), (req, res) => {
+app.post("/api/upload", upload.single("file"), async (req, res) => {
   const file = req.file;
-  res.status(200).json(file.filename);
+  const storageRef = ref(storage, `uploads/${Date.now()}_${file.originalname}`);
+
+  try {
+    await uploadBytes(storageRef, file.buffer);
+    const url = await getDownloadURL(storageRef);
+    res.status(200).json({ url });
+  } catch (error) {
+    res.status(500).json({ error: "Dosya yüklenirken bir hata oluştu" });
+  }
 });
 
 // JWT Middleware
@@ -74,18 +88,10 @@ const verifyToken = (req, res, next) => {
 };
 
 // Routes
-app.use("/api/users",  userRoutes);
+app.use("/api/users", verifyToken, userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/notifications", notificationRoutes);
-
-// Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, "../frontend/rafine/build")));
-
-// Catch-all handler to serve React's index.html for any unhandled routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/rafine/build", "index.html"));
-});
+app.use("/api/posts", verifyToken, postRoutes);
+app.use("/api/notifications", verifyToken, notificationRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;
