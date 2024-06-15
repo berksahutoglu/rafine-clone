@@ -19,26 +19,36 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setCurrentUser(res.data);
-      localStorage.setItem("user", JSON.stringify(res.data));
-      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     } catch (err) {
       if (err.response && err.response.data) {
-        throw new Error(err.response.data);
+        throw new Error(err.response.data); // Hata mesajını fırlat
       } else {
-        throw new Error("An unexpected error occurred");
+        throw new Error("An unexpected error occurred"); // Genel bir hata fırlat
       }
     }
   };
 
-  useEffect(() => {
-    if (currentUser && currentUser.token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${currentUser.token}`;
+  const logout = async () => {
+    try {
+      await axios.post(
+        "https://rafine-clone-6.onrender.com/api/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setCurrentUser(null);
+    } catch (err) {
+      console.error(err);
     }
+  };
+
+  useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));
   }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, setCurrentUser }}>
+    <AuthContext.Provider value={{ currentUser, login, logout, setCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );
