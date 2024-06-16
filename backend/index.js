@@ -22,7 +22,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Firebase yapılandırması
+// Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -46,7 +46,19 @@ mongoose
 
 // Middleware to set CORS headers
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.FRONTEND_URL || "http://localhost:3000"
+  );
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
   next();
 });
 
@@ -61,7 +73,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("common"));
 
-// Multer yapılandırması
+// Multer configuration
 const upload = multer({ storage: multer.memoryStorage() });
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
@@ -73,8 +85,8 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
     const url = await getDownloadURL(storageRef);
     res.status(200).json({ url });
   } catch (error) {
-    console.error("Dosya yüklenirken bir hata oluştu", error);
-    res.status(500).json({ error: "Dosya yüklenirken bir hata oluştu" });
+    console.error("Error uploading file", error);
+    res.status(500).json({ error: "Error uploading file" });
   }
 });
 
