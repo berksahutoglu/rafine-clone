@@ -65,7 +65,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(
   cors({
-    origin: ['https://rafine-clone.vercel.app', 'http://localhost:3000'],
+    origin: "*",
     methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'],
     credentials: true,
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
