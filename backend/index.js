@@ -14,11 +14,6 @@ import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import authRoutes from "./routes/auth.js";
 import notificationRoutes from "./routes/notification.js";
-<<<<<<< HEAD
-import jwt from "jsonwebtoken";
-=======
-import jwt from "jsonwebstoken";
->>>>>>> 9b3079b1b29194e78a8629cfc418ddbf396b7322
 
 // Load environment variables
 dotenv.config();
@@ -83,23 +78,11 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-// JWT Middleware
-const verifyToken = (req, res, next) => {
-  const token = req.cookies.accessToken;
-  if (!token) return res.status(401).json("Not authenticated!");
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json("Token is not valid!");
-    req.user = user;
-    next();
-  });
-};
-
 // Routes
-app.use("/api/users", verifyToken, userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", verifyToken, postRoutes);
-app.use("/api/notifications", verifyToken, notificationRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;
