@@ -14,11 +14,8 @@ import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import authRoutes from "./routes/auth.js";
 import notificationRoutes from "./routes/notification.js";
-<<<<<<< HEAD
 import jwt from "jsonwebtoken";
-=======
-import jwt from "jsonwebstoken";
->>>>>>> 9b3079b1b29194e78a8629cfc418ddbf396b7322
+
 
 // Load environment variables
 dotenv.config();
