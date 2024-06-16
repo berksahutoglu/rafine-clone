@@ -47,7 +47,7 @@ mongoose
 // Middleware to set CORS headers
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'],
     credentials: true,
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
