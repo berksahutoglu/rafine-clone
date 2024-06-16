@@ -65,8 +65,10 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: ['https://rafine-clone.vercel.app', 'http://localhost:3000'],
+    methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'],
     credentials: true,
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   })
 );
 app.use(cookieParser());
