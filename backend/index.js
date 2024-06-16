@@ -47,7 +47,7 @@ mongoose
 // Middleware to set CORS headers
 app.use(
   cors({
-    origin: ['https://rafine-clone.vercel.app', 'http://localhost:3000'],
+    origin: "https://rafine-clone.vercel.app",
     methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'],
     credentials: true,
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
