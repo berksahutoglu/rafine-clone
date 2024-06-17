@@ -57,10 +57,13 @@ const NewPost = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      console.log("Uploading file:", file);
       const res = await makeRequest.post("/upload", formData);
+      console.log("File upload response:", res.data);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error("File upload error:", err);
+      setErrorMessage("Dosya yüklenemedi");
     }
   };
 
@@ -85,11 +88,13 @@ const NewPost = () => {
     e.preventDefault();
     if (!title || !desc || !file) {
       setErrorMessage("LÜTFEN TÜM ALANLARI DOLDURUN");
+      console.log("Form is incomplete");
       return;
     }
 
     let imgUrl = "";
     if (file) imgUrl = await upload();
+    console.log("Image URL:", imgUrl);
     const newPost = {
       desc,
       img: imgUrl,
@@ -98,15 +103,19 @@ const NewPost = () => {
       isChecked: checked ? 1 : 0,
     };
 
+    console.log("Creating new post:", newPost);
     mutation.mutate(newPost, {
       onSuccess: (data) => {
+        console.log("Post created successfully:", data);
         const newNotification = {
           message: `${content} ile ilgili yeni haber var!`,
           postId: data.data.id,
         };
 
         notificationMutation.mutate(newNotification, {
-          onSuccess: () => {},
+          onSuccess: () => {
+            console.log("Notification created successfully");
+          },
         });
 
         handleClose();
@@ -116,14 +125,14 @@ const NewPost = () => {
         setContent("");
         setChecked(false);
         setErrorMessage(""); // Reset error message
-
-        console.log(imgUrl);
       },
       onError: (error) => {
+        console.error("Error sharing the post:", error);
         setErrorMessage("Error sharing the post: " + error.message);
       },
     });
   };
+  
   const handleClose = () => {
     setOpen(false);
   };
@@ -186,7 +195,11 @@ const NewPost = () => {
           )}
           <ImageUploadButton
             role={undefined}
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              console.log("Selected file:", selectedFile);
+              setFile(selectedFile);
+            }}
           />
           <TextField
             label="Yazı"
