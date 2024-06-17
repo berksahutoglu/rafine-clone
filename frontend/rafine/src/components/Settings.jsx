@@ -90,13 +90,13 @@ const Settings = () => {
       formData.append("file", file);
 
       try {
-        const uploadRes = await makeRequest.post("/upload", formData, {
+        const uploadRes = await axios.post("/api/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        profilePicUrl = `/upload/${uploadRes.data}`;
+        profilePicUrl = `${uploadRes.data}`;
       } catch (err) {
         console.error("Failed to upload file", err);
         setErrorMessage("Profil fotoğrafı yüklenemedi.");
