@@ -47,10 +47,16 @@ mongoose
 // Middleware to set CORS headers
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'],
+    origin: "https://rafine-clone.vercel.app", // Frontend URL'nizi buraya ekleyin
+    methods: ["GET", "HEAD", "OPTIONS", "POST", "PUT"],
     credentials: true,
-    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
   })
 );
 
@@ -60,15 +66,24 @@ app.use(helmet());
 app.use(morgan("common"));
 
 // Multer configuration
-const upload = multer({ storage: multer.memoryStorage() });
+const storageEngine = multer.memoryStorage();
+const upload = multer({ storage: storageEngine });
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
   const file = req.file;
+
+  if (!file) {
+    console.log("No file received");
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  console.log("Received file:", file);
   const storageRef = ref(storage, `uploads/${Date.now()}_${file.originalname}`);
 
   try {
     await uploadBytes(storageRef, file.buffer);
     const url = await getDownloadURL(storageRef);
+    console.log("File uploaded successfully. URL:", url);
     res.status(200).json({ url });
   } catch (error) {
     console.error("Error uploading file", error);
