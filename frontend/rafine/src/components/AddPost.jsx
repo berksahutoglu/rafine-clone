@@ -58,7 +58,13 @@ const NewPost = () => {
       const formData = new FormData();
       formData.append("file", file);
       console.log("Uploading file:", file);
-      const res = await makeRequest.post("/upload", formData);
+
+      const res = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       console.log("File upload response:", res.data);
       return res.data;
     } catch (err) {
@@ -132,7 +138,7 @@ const NewPost = () => {
       },
     });
   };
-  
+
   const handleClose = () => {
     setOpen(false);
   };
