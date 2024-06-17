@@ -15,6 +15,7 @@ import { useMutation, QueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../axios";
 import SettingsNavBar from "./SettingsNavbar";
 import { AuthContext } from "../context/authContext";
+import axios from "axios";
 
 const Settings = () => {
   const divStyle = {
