@@ -178,7 +178,7 @@ const Post = ({ post, notifications }) => {
             objectFit: "contain",
           }}
           component="img"
-          image={"/upload/" + post.img}
+          image={post.img}
           alt=""
         />
 
