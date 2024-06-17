@@ -97,7 +97,7 @@ const Settings = () => {
           },
         });
 
-        profilePicUrl = `${uploadRes.data}`;
+        profilePicUrl = `${uploadRes.data.url}`;
       } catch (err) {
         console.error("Failed to upload file", err);
         setErrorMessage("Profil fotoğrafı yüklenemedi.");
