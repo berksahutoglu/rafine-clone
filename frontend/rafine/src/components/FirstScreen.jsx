@@ -5,7 +5,7 @@ import People from "../photos/people.jpg";
 import News from "../photos/news.png";
 import { ReactComponent as Logo } from "../photos/logo.svg";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Tab, Tabs } from "@mui/material";
+import { Tab } from "@mui/material";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";

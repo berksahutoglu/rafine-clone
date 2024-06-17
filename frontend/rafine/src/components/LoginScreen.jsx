@@ -1,15 +1,10 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import People from "../photos/people.jpg";
-import News from "../photos/news.png";
 
 import { ReactComponent as Logo } from "../photos/logo.svg";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Input, Tab, Tabs, TextField, Typography } from "@mui/material";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import TabContext from "@mui/lab/TabContext";
+import { TextField, Typography } from "@mui/material";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -56,14 +51,6 @@ const LoginScreen = () => {
     },
   });
 
-  const [value, setValue] = React.useState("1");
-
-  const divStyle = {
-    fontFamily: "Libre Franklin, sans-serif",
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#223734",
-  };
   const buttonStyle = {
     fontFamily: "Libre Franklin, sans-serif",
     fontSize: 13,
@@ -106,9 +93,6 @@ const LoginScreen = () => {
             alignItems: "center",
             width: 500,
             top: 100,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
             gap: 3,
           }}
         >

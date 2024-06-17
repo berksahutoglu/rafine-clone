@@ -1,24 +1,9 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  Toolbar,
-  Typography,
-  styled,
-} from "@mui/material";
+import { AppBar, Box, Button, Drawer, Toolbar, styled } from "@mui/material";
 import React, { useState } from "react";
 import { ReactComponent as Logo } from "../photos/logo.svg";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
+
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import Paper from "@mui/material/Paper";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";

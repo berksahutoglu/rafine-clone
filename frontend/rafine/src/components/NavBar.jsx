@@ -2,13 +2,8 @@ import {
   AppBar,
   Box,
   Button,
-  Divider,
   Drawer,
-  List,
-  ListItem,
-  ListItemButton,
   Toolbar,
-  Typography,
   styled,
   Badge,
 } from "@mui/material";
@@ -30,7 +25,6 @@ const NavBar = ({ value, handleChange, userId }) => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(0); // Başlangıçta 0 bildirim var
 
   const [unreadCount, setUnreadCount] = useState(0);
 

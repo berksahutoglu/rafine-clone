@@ -1,8 +1,7 @@
 import React from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Post from "./Post";
 import { makeRequest } from "../../axios";
-import axios from "axios";
 
 const Posts = ({ user_id, filterValue }) => {
   const { isLoading, error, data } = useQuery({
@@ -10,8 +9,6 @@ const Posts = ({ user_id, filterValue }) => {
     queryFn: () =>
       makeRequest.get("/posts?user_id=" + user_id).then((res) => res.data),
   });
-
-  const queryClient = useQueryClient();
 
   // Add a null check before calling the filter method
   const filteredPosts = data

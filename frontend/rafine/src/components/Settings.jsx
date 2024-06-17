@@ -24,7 +24,7 @@ const Settings = () => {
     color: "#2e423f",
   };
 
-  const { currentUser, updateUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [name, setName] = useState(currentUser?.name || "");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

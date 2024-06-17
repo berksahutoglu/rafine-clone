@@ -52,7 +52,6 @@ const NewPost = () => {
   const [content, setContent] = useState("");
   const [checked, setChecked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [notifications, setNotifications] = useState([]);
 
   const upload = async () => {
     try {

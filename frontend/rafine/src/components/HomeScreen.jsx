@@ -6,12 +6,6 @@ import { Box } from "@mui/material";
 import RightBar from "./RightBar";
 
 const HomeScreen = () => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {

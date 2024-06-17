@@ -1,6 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPost from "./AddPost";
 
 const RightBar = () => {

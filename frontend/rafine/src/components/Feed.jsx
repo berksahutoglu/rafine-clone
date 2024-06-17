@@ -1,23 +1,6 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Collapse,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tab,
-  Tooltip,
-  Typography,
-  styled,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import resim1 from "../photos/resim1.png";
+import React from "react";
+import { Box } from "@mui/material";
+
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import Posts from "./post/Posts.jsx";
