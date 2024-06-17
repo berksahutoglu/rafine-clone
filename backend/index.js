@@ -78,7 +78,10 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
   }
 
   console.log("Received file:", file);
-  const storageRef = ref(storage, `uploads/${Date.now()}_${file.originalname}`);
+  const storageRef = ref(
+    storage,
+    `rafineee/${Date.now()}_${file.originalname}`
+  );
 
   try {
     await uploadBytes(storageRef, file.buffer);
