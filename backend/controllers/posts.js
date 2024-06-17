@@ -76,29 +76,37 @@ export const updatePost = async (req, res) => {
   });
 };
 
-// Delete a post
 export const deletePost = async (req, res) => {
   const token = req.cookies.accessToken;
-  if (!token) return res.status(401).json("Not logged in!");
+  if (!token) {
+    console.log("No token provided");
+    return res.status(401).json("Not logged in!");
+  }
 
   jwt.verify(token, "secretkey", async (err, userInfo) => {
-    if (err) return res.status(403).json("Token is not valid!");
+    if (err) {
+      console.log("Token is not valid:", err);
+      return res.status(403).json("Token is not valid!");
+    }
 
     try {
-      // Post'u sil
+      console.log("Attempting to delete post with ID:", req.params.id);
       const deletedPost = await Post.findOneAndDelete({
         _id: req.params.id,
         userId: userInfo.id,
       });
-      if (!deletedPost)
+      if (!deletedPost) {
+        console.log("Post not found or user not authorized");
         return res.status(403).json("You can delete only your post");
+      }
 
-      // İlgili bildirimleri sil
-      await Notification.deleteMany({ postId: req.params.id }); // <--- corrected
+      await Notification.deleteMany({ postId: req.params.id });
+      console.log("Post and notifications deleted successfully");
 
       res.status(200).json("Post and its notifications have been deleted.");
     } catch (err) {
-      res.status(500).json(err);
+      console.log("Error deleting post:", err);
+      res.status(500).json(err.message);
     }
   });
 };

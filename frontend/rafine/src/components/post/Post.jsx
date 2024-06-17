@@ -36,7 +36,7 @@ const divStyle = {
   color: "#2e423f",
 };
 
-const Post = ({ post, notifications }) => {
+const Post = ({ post }) => {
   const [expanded, setExpanded] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -69,6 +69,10 @@ const Post = ({ post, notifications }) => {
       queryClient.invalidateQueries(["posts"]);
       setIsDeleted(true);
     },
+    onError: (error) => {
+      console.log("Delete Error:", error);
+      setErrorMessage("Error deleting the post: " + error.message);
+    },
   });
 
   const editMutation = useMutation({
@@ -86,8 +90,8 @@ const Post = ({ post, notifications }) => {
   };
 
   const handleConfirmDelete = () => {
+    console.log("Confirming delete for post:", post._id);
     deleteMutation.mutate(post._id);
-    setIsDeleted(true);
     setShowConfirmation(false);
   };
 
@@ -103,7 +107,7 @@ const Post = ({ post, notifications }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     if (!editTitle || !editDesc) {
-      setErrorMessage("LÜTFEN TÜM ALANLARI DOLDURUN");
+      setErrorMessage("Please fill out all fields");
       return;
     }
     const updatedPost = {
@@ -111,7 +115,6 @@ const Post = ({ post, notifications }) => {
       desc: editDesc,
     };
 
-    // Update UI immediately
     setEditMode(false);
     post.title = editTitle;
     post.desc = editDesc;
@@ -235,7 +238,7 @@ const Post = ({ post, notifications }) => {
           <Card>
             <CardContent>
               <Typography variant="h5">
-                Postu Silmek İstediğinizden Emin Misiniz?
+                Are you sure you want to delete this post?
               </Typography>
               <Box mt={2} display="flex" justifyContent="space-between">
                 <Button
@@ -243,14 +246,14 @@ const Post = ({ post, notifications }) => {
                   color="error"
                   onClick={handleConfirmDelete}
                 >
-                  Sil
+                  Delete
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleCancelDelete}
                 >
-                  Vazgeç
+                  Cancel
                 </Button>
               </Box>
             </CardContent>
