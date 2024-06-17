@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { makeRequest } from "../axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: "flex",
