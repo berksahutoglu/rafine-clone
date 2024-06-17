@@ -67,7 +67,7 @@ const NewPost = () => {
       });
 
       console.log("File upload response:", res.data);
-      return res.data;
+      return res.data.url;
     } catch (err) {
       console.error("File upload error:", err);
       setErrorMessage("Dosya yüklenemedi");
