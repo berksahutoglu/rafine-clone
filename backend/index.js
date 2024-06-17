@@ -48,7 +48,7 @@ mongoose
 app.use(
   cors({
     origin: "https://rafine-clone.vercel.app", // Frontend URL'nizi buraya ekleyin
-    methods: ["GET", "HEAD", "OPTIONS", "POST", "PUT"],
+    methods: ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: [
       "Origin",
