@@ -44,11 +44,11 @@ const Preferences = () => {
             borderRadius={2}
           >
             <Typography ml={3} mt={4} style={divStyle}>
-              Bildirimler
+              İçerikler
             </Typography>
             <List>
               <ListItem sx={{ height: 70 }}>
-                Son dakika haberleri <Switch sx={{ ml: 5 }} />
+                Piyasa <Switch sx={{ ml: 5 }} />
               </ListItem>
               <Divider />
               <ListItem sx={{ height: 70 }}>

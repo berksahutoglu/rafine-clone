@@ -69,7 +69,7 @@ const LeftBar = () => {
           <CardMedia
             component="img"
             height="140"
-            image={"/upload/" + post.img || resim1} // Eğer post.img yoksa varsayılan resim kullanılır
+            image={post.img} // Eğer post.img yoksa varsayılan resim kullanılır
             alt="Post image"
           />
           <CardActions disableSpacing>
