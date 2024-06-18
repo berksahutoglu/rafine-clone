@@ -11,7 +11,6 @@ import {
   styled,
 } from "@mui/material";
 import { makeRequest } from "../axios"; // axios ile istek yapmak için
-import resim1 from "../photos/resim1.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const StyledExpandMore = styled((props) => {
