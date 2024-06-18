@@ -1,6 +1,6 @@
 # RAFINE - CLONE
 
-### Proje Tanımı
+### 1. Proje Tanımı
 
 Rafine-Clone isimli websitemiz sayesinde gündemden çok hızlı bir şekilde haberdar olacaksınız. Belirli başlıklar altında paylaşılan haberleri kendi ilgi alanınıza göre sıralayıp bunlardan hızlı ve kolay bir şekilde faydanalabileceksiniz.
 
