@@ -64,7 +64,7 @@ const LeftBar = () => {
       {posts.map((post) => (
         <Card key={post.id} sx={{ width: 300, m: 2 }}>
           <Box marginTop={2} mb={2}>
-            <div style={divStyle}>{post.desc}</div>
+            <div style={divStyle}>{post.title}</div>
           </Box>
           <CardMedia
             component="img"
