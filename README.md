@@ -10,11 +10,11 @@ Haber ve Güncel Olaylar
 
 ### 3. Referans Websitesi
 
-Rafine
-
-### 3. Websitesi Adresi
-
 https://news.rafine.io/
+
+### 4. Uygulama Adresi
+
+https://rafine-clone.vercel.app/
 
 # Grup Adı
 
